@@ -1,19 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NS Puzzle Answerer</title>
-  </head>
-  <body>
-    <label for="puzzle">Puzzle</label>
-    <input name="puzzle">
-	<app-out></app-out>
-	<script>
-const out = document.querySelector("app-out")	  
-// from https://stationview.app/ - should clean up
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NS Puzzle Answerer</title>
+	</head>
+	<body>
+		<label for="puzzle">Puzzle</label>
+		<input name="puzzle" />
+		<app-out></app-out>
+		<script>
+			const out = document.querySelector("app-out");
+			// from https://stationview.app/ - should clean up
 
-const stations = `
+			const stations = `
 A
 
 Aalten
@@ -848,21 +848,28 @@ Zwolle
 008400320
 ’t Harde
 008400388
-`.split('\n')
+`.split("\n");
 
-function transform(s){
-  return s.toLowerCase().replace(/ /g,'').split('').sort().join('')
-}
+			function transform(s) {
+				return s
+					.toLowerCase()
+					.replace(/ /g, "")
+					.split("")
+					.sort()
+					.join("");
+			}
 
-document.querySelector("input").addEventListener("change", (e) => {
-  try {
-  const found = stations.find(s => transform(s) == transform(e.target.value))
-  
-  out.innerHTML = found.join("<br>")
-  } catch (e) {
-    alert(e)
-  }
-  })
-	</script>
-  </body>
+			document.querySelector("input").addEventListener("change", (e) => {
+				try {
+					const found = stations.filter(
+						(s) => transform(s) == transform(e.target.value)
+					);
+
+					out.innerHTML = found.join("<br>");
+				} catch (e) {
+					alert(e);
+				}
+			});
+		</script>
+	</body>
 </html>
