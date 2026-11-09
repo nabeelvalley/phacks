@@ -10,13 +10,855 @@
     <input name="puzzle">
 	<app-out></app-out>
 	<script>
-  alert("hi")
 const out = document.querySelector("app-out")	  
+// from https://stationview.app/ - should clean up
+
+const stations = `
+A
+
+Aalten
+008400045
+Abcoude
+008400047
+Akkrum
+008400049
+Alkmaar
+008400050
+Alkmaar Noord
+008400052
+Almelo
+008400051
+Almelo de Riet
+008400520
+Almere Buiten
+008400081
+Almere Centrum
+008400080
+Almere Muziekwijk
+008400082
+Almere Oostvaarders
+008400226
+Almere Parkwijk
+008400104
+Almere Poort
+008400450
+Alphen aan den Rijn
+008400053
+Amersfoort Centraal
+008400055
+Amersfoort Schothorst
+008400054
+Amersfoort Vathorst
+008400228
+Amsterdam Amstel
+008400057
+Amsterdam Bijlmer ArenA
+008400074
+Amsterdam Holendrecht
+008400231
+Amsterdam Lelylaan
+008400079
+Amsterdam Muiderpoort
+008400060
+Amsterdam RAI
+008400056
+Amsterdam Science Park
+008400235
+Amsterdam Sloterdijk
+008400059
+Amsterdam Zuid
+008400061
+Amsterdam-Centraal
+008400058
+Anna Paulowna
+008400065
+Apeldoorn
+008400066
+Apeldoorn de Maten
+008400233
+Apeldoorn Osseveld
+008400229
+Appingedam
+008400067
+Arkel
+008400068
+Arnemuiden
+008400069
+Arnhem Centraal
+008400071
+Arnhem Presikhaaf
+008400075
+Arnhem Velperpoort
+008400072
+Arnhem Zuid
+008400227
+Assen
+008400073
+B
+
+Baarn
+008400086
+Bad Nieuweschans
+008400457
+Baflo
+008400089
+Barendrecht
+008400090
+Barneveld Centrum
+008400091
+Barneveld Noord
+008400092
+Barneveld Zuid
+008400115
+Bedum
+008400094
+Beek-Elsloo
+008400096
+Beesd
+008400097
+Beilen
+008400100
+Bergen op Zoom
+008400108
+Best
+008400112
+Beverwijk
+008400113
+Bilthoven
+008400114
+Blerick
+008400117
+Bloemendaal
+008400118
+Bodegraven
+008400121
+Borne
+008400124
+Boskoop
+008400125
+Boven-Hardinxveld
+008400236
+Bovenkarspel Flora
+008400230
+Bovenkarspel-Grootebroek
+008400127
+Boxmeer
+008400128
+Boxtel
+008400129
+Breda
+008400131
+Breda-Prinsenbeek
+008400132
+Breukelen
+008400133
+Brummen
+008400136
+Buitenpost
+008400139
+Bunde
+008400140
+Bunnik
+008400141
+Bussum Zuid
+008400145
+C
+
+Capelle Schollevaar
+008400147
+Castricum
+008400151
+Chevremont
+008400152
+Coevorden
+008400153
+Cuijk
+008400155
+Culemborg
+008400154
+D
+
+Daarlerveen
+008400164
+Dalen
+008400161
+Dalfsen
+008400167
+De Eschmarke
+008400217
+De Vink
+008400188
+Deinum
+008400168
+Delden
+008400169
+Delft
+008400170
+Delft Campus
+008400166
+Delfzijl
+008400171
+Delfzijl West
+008400175
+Den Dolder
+008400179
+Den Haag Centraal
+008400282
+Den Haag HS
+008400280
+Den Haag Laan van Nieuw Oost Indie
+008400380
+Den Haag Mariahoeve
+008400278
+Den Haag Moerwijk
+008400279
+Den Haag Ypenburg
+008400379
+Den Helder
+008400311
+Den Helder Zuid
+008400303
+Deurne
+008400172
+Deventer
+008400173
+Deventer Colmschate
+008400185
+Didam
+008400174
+Diemen
+008400165
+Diemen Zuid
+008400163
+Dieren
+008400176
+Doetinchem
+008400177
+Doetinchem de Huet
+008400184
+Dordrecht
+008400180
+Dordrecht Stadspolders
+008400186
+Dordrecht Zuid
+008400181
+Driebergen-Zeist
+008400182
+Driehuis
+008400183
+Dronrijp
+008400192
+Dronten
+008400198
+Duiven
+008400193
+Duivendrecht
+008400194
+E
+
+Echt
+008400195
+Ede Centrum
+008400201
+Ede-Wageningen
+008400200
+Eemshaven
+008400202
+Eijsden
+008400219
+Eindhoven Centraal
+008400206
+Eindhoven Strijp-S
+008400196
+Elst
+008400207
+Emmen
+008400208
+Emmen Zuid
+008400407
+Enkhuizen
+008400210
+Enschede
+008400212
+Enschede Kennispark
+008400221
+Ermelo
+008400216
+Etten-Leur
+008400218
+Eygelshoven
+008400338
+Eygelshoven Markt
+008400234
+F
+
+Franeker
+008400232
+G
+
+Gaanderen
+008400241
+Geldermalsen
+008400244
+Geldrop
+008400245
+Geleen Oost
+008400246
+Geleen-Lutterade
+008400248
+Gilze-Rijen
+008400251
+Glanerbrug
+008400262
+Goes
+008400253
+Goor
+008400254
+Gorinchem
+008400256
+Gouda
+008400258
+Gouda Goverwelle
+008400257
+Gramsbergen
+008400259
+Grijpskerk
+008400267
+Groningen
+008400263
+Groningen Europapark
+008400238
+Groningen Noord
+008400264
+Grou-Jirnsum
+008400266
+H
+
+Haarlem
+008400285
+Haarlem Spaarnwoude
+008400270
+Halfweg-Zwanenburg
+008400400
+Hardenberg
+008400293
+Harderwijk
+008400294
+Hardinxveld Blauwe Zoom
+008400438
+Hardinxveld-Giessendam
+008400295
+Haren
+008400297
+Harlingen
+008400296
+Harlingen Haven
+008400298
+Heemskerk
+008400317
+Heemstede-Aerdenhout
+008400302
+Heerenveen
+008400305
+Heerenveen IJsstadion
+008400301
+Heerhugowaard
+008400306
+Heerlen
+008400307
+Heerlen de Kissel
+008400409
+Heerlen Woonboulevard
+008400404
+Heeze
+008400308
+Heiloo
+008400309
+Heino
+008400310
+Helmond
+008400313
+Helmond ’t Hout
+008400300
+Helmond Brandevoort
+008400242
+Helmond Brouwhuis
+008400299
+Hemmen-Dodewaard
+008400315
+Hengelo
+008400316
+Hengelo Gezondheidspark
+008400433
+Hengelo Oost
+008400312
+Hillegom
+008400329
+Hilversum
+008400322
+Hilversum Media Park
+008400324
+Hilversum Sportpark
+008400570
+Hindeloopen
+008400323
+Hoensbroek
+008400326
+Hoevelaken
+008400490
+Hollandsche Rading
+008400327
+Holten
+008400328
+Hoofddorp
+008400332
+Hoogeveen
+008400330
+Hoogezand-Sappemeer
+008400331
+Hoogkarspel
+008400334
+Hoorn
+008400337
+Hoorn Kersenboogerd
+008400336
+Horst-Sevenum
+008400339
+Houten
+008400340
+Houten Castellum
+008400335
+Houthem-St Gerlach
+008400341
+Hurdegaryp
+008400292
+I
+
+IJlst
+008400722
+K
+
+Kampen
+008400353
+Kampen Zuid
+008400360
+Kapelle-Biezelinge
+008400354
+Kerkrade Centrum
+008400355
+Kesteren
+008400359
+Klarenbeek
+008400361
+Klimmen-Ransdaal
+008400362
+Koog aan de Zaan
+008400363
+Koudum-Molkwerum
+008400366
+Krabbendijke
+008400367
+Krommenie-Assendelft
+008400368
+Kropswolde
+008400369
+Kruiningen-Yerseke
+008400370
+L
+
+Lage Zwaluwe
+008400382
+Landgraaf
+008400548
+Leerdam
+008400386
+Leeuwarden
+008400387
+Leeuwarden Camminghaburen
+008400389
+Leiden Centraal
+008400390
+Leiden Lammenschans
+008400384
+Lelystad Centrum
+008400394
+Lichtenvoorde-Groenlo
+008400395
+Lochem
+008400399
+Loppersum
+008400403
+Lunteren
+008400405
+M
+
+Maarheeze
+008400432
+Maarn
+008400417
+Maarssen
+008400419
+Maastricht
+008400424
+Maastricht Noord
+008400449
+Maastricht Randwyck
+008400426
+Mantgum
+008400427
+Marienberg
+008400428
+Martenshoek
+008400430
+Meerssen
+008400434
+Meppel
+008400435
+Middelburg
+008400436
+Mook Molenhoek
+008400446
+N
+
+Naarden-Bussum
+008400452
+Nieuw Amsterdam
+008400454
+Nieuw Vennep
+008400460
+Nieuwerkerk aan den IJssel
+008400455
+Nijkerk
+008400469
+Nijmegen
+008400470
+Nijmegen Dukenburg
+008400475
+Nijmegen Goffert
+008400477
+Nijmegen Heyendaal
+008400468
+Nijmegen Lent
+008400451
+Nijverdal
+008400472
+Nunspeet
+008400466
+Nuth
+008400467
+O
+
+Obdam
+008400480
+Oisterwijk
+008400482
+Oldenzaal
+008400483
+Olst
+008400486
+Ommen
+008400487
+Oosterbeek
+008400489
+Opheusden
+008400494
+Oss
+008400495
+Oss West
+008400496
+Oudenbosch
+008400498
+Overveen
+008400501
+P
+
+Purmerend
+008400508
+Purmerend Overwhere
+008400506
+Purmerend Weidevenne
+008400499
+Putten
+008400509
+R
+
+Raalte
+008400513
+Ravenstein
+008400515
+Reuver
+008400518
+Rheden
+008400519
+Rhenen
+008400517
+Rijssen
+008400538
+Rijswijk
+008400505
+Rilland-Bath
+008400521
+Roermond
+008400523
+Roodeschool
+008400525
+Roosendaal
+008400526
+Rosmalen
+008400524
+Rotterdam Alexander
+008400507
+Rotterdam Blaak
+008400529
+Rotterdam Centraal
+008400530
+Rotterdam Lombardijen
+008400542
+Rotterdam Noord
+008400531
+Rotterdam Stadion
+008400534
+Rotterdam Zuid
+008400533
+Ruurlo
+008400537
+S
+
+Santpoort Noord
+008400543
+Santpoort Zuid
+008400544
+Sappemeer Oost
+008400545
+Sassenheim
+008400603
+Sauwerd
+008400547
+Schagen
+008400549
+Scheemda
+008400551
+Schiedam Centrum
+008400553
+Schin op Geul
+008400555
+Schinnen
+008400554
+Schiphol Airport
+008400561
+Sittard
+008400564
+Sliedrecht
+008400565
+Sliedrecht Baanhoek
+008400497
+Sneek
+008400566
+Sneek Noord
+008400574
+Soest
+008400567
+Soest Zuid
+008400571
+Soestdijk
+008400569
+Spaubeek
+008400572
+Stavoren
+008400575
+Stedum
+008400576
+Steenwijk
+008400578
+Susteren
+008400582
+Swalmen
+008400583
+T
+
+Tegelen
+008400591
+Terborg
+008400592
+Tiel
+008400596
+Tiel Passewaaij
+008400600
+Tilburg
+008400597
+Tilburg Reeshof
+008400598
+Tilburg Universiteit
+008400594
+Twello
+008400599
+U
+
+Uitgeest
+008400615
+Uithuizen
+008400617
+Uithuizermeeden
+008400618
+Usquert
+008400619
+Utrecht Centraal
+008400621
+Utrecht Leidsche Rijn
+008400607
+Utrecht Lunetten
+008400623
+Utrecht Overvecht
+008400620
+Utrecht Terwijde
+008400614
+Utrecht Vaartsche Rijn
+008400606
+Utrecht Zuilen
+008400613
+V
+
+Valkenburg
+008400632
+Varsseveld
+008400635
+Veendam
+008400636
+Veenendaal Centrum
+008400627
+Veenendaal West
+008400628
+Veenendaal-De Klomp
+008400637
+Veenwouden
+008400638
+Velp
+008400640
+Venlo
+008400644
+Venray
+008400646
+Vierlingsbeek
+008400647
+Vleuten
+008400651
+Vlissingen
+008400652
+Vlissingen Souburg
+008400653
+Voerendaal
+008400656
+Voorburg
+008400658
+Voorhout
+008400655
+Voorschoten
+008400659
+Voorst-Empe
+008400668
+Vorden
+008400661
+Vriezenveen
+008400664
+Vroomshoop
+008400666
+Vught
+008400667
+W
+
+Waddinxveen
+008400675
+Waddinxveen Noord
+008400674
+Warffum
+008400679
+Weert
+008400684
+Weesp
+008400685
+Wehl
+008400686
+Westervoort
+008400688
+Wezep
+008400690
+Wierden
+008400691
+Wijchen
+008400710
+Wijhe
+008400711
+Winschoten
+008400696
+Winsum
+008400697
+Winterswijk
+008400698
+Winterswijk West
+008400700
+Woerden
+008400702
+Wolfheze
+008400704
+Wolvega
+008400705
+Workum
+008400706
+Wormerveer
+008400707
+Z
+
+Zaandam
+008400731
+Zaandam Kogerveld
+008400728
+Zaandijk Zaanse Schans
+008400364
+Zaltbommel
+008400732
+Zandvoort aan Zee
+008400733
+Zetten-Andelst
+008400734
+Zevenaar
+008400735
+Zevenbergen
+008400737
+Zoetermeer
+008400741
+Zoetermeer Oost
+008400740
+Zuidbroek
+008400742
+Zuidhorn
+008400743
+Zutphen
+008400744
+Zwaagwesteinde
+008400745
+Zwijndrecht
+008400752
+Zwolle
+008400747
+#
+
+’s-Hertogenbosch
+008400319
+’s-Hertogenbosch Oost
+008400320
+’t Harde
+008400388
+`.split('\n')
+
+function transform(s){
+  return s.toLowerCase().replace(/ /g,'').split('').sort().join('')
+}
+
 document.querySelector("input").addEventListener("change", (e) => {
-  alert("change" + e.target.value)
-	out.innerText = e.target.value
-		
+  const found = stations.find(s => transform(s) == transform(e.target.value))
 	})
+  
+  out.innerHTML = found.join("<br>")
 	</script>
   </body>
 </html>
