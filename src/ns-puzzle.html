@@ -855,10 +855,14 @@ function transform(s){
 }
 
 document.querySelector("input").addEventListener("change", (e) => {
+  try {
   const found = stations.find(s => transform(s) == transform(e.target.value))
 	})
   
   out.innerHTML = found.join("<br>")
+  } catch (e) {
+    alert(e)
+  }
 	</script>
   </body>
 </html>
